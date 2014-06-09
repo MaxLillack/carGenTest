@@ -12,8 +12,15 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add directory="../CppLambdaTest" />
+					<Add directory="../car2" />
 				</Compiler>
+				<Linker>
+					<Add directory="../CppLambdaTest" />
+					<Add directory="../car2" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/car_test" prefix_auto="1" extension_auto="1" />
@@ -32,6 +39,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../CppLambdaTest/LTest.cpp" />
+		<Unit filename="../CppLambdaTest/LTest.h" />
+		<Unit filename="../CppLambdaTest/LTestAssert.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
