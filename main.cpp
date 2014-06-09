@@ -2,6 +2,8 @@
 #include "LTestAssert.h"
 #include "configuration.h"
 #include "parts.h"
+#include "generator.h"
+#include "Restriction.h"
 
 using namespace std;
 
@@ -46,10 +48,50 @@ int main()
         LTAssert::False(Conf::containsDerivedPart<parts::Body>());
         LTAssert::True(Conf::containsDerivedPart<parts::GasEngine>());
         LTAssert::True(Conf::containsDerivedPart<parts::AutomaticTransmissionBase>());
-        LTAssert::False(Conf::containsDerivedPart<parts::ManualTransmissionBase>());
+        LTAssert::False(Conf::containsDerivedPart<parts::ManuelTransmissionBase>());
         return true;
     });
 
+    LTest::addTest("containsDerivedPart() 3", [](){
+        using Conf = Config<parts::AutomaticTransmission<4>, parts::Body, parts::ElectroEngine>;
+        LTAssert::True(Conf::containsDerivedPart<parts::Transmission>(), "must contain Transmission");
+        LTAssert::True(Conf::containsDerivedPart<parts::Engine>(), "must contain Engine");
+        LTAssert::True(Conf::containsDerivedPart<parts::Body>(), "must contain Body");
+        LTAssert::True(!(Conf::containsDerivedPart<parts::ElectroEngine>()) || isEven(Conf::PreGenCar::gears));
+        return true;
+    });
+
+    LTest::addTest("GeneratorTest", [](){
+        using Conf = Config<parts::Body, parts::ElectroEngine, parts::AutomaticTransmission<4>>;
+        using Restr = CarRestrictions<Conf>;
+        using Gen = Generator<Conf, Restr, parts::Body, parts::ElectroEngine, parts::AutomaticTransmission<4>>;
+        Gen car;
+        return true;
+    });
+
+    LTest::addTest("CarGeneratorTest", [](){
+        using CarGen = CarGenerator<parts::Body, parts::ElectroEngine, parts::AutomaticTransmission<4>>;
+        CarGen car;
+        return true;
+    });
+
+/*
+    //has to fail at compile time
+    LTest::addTest("GeneratorTest fail", [](){
+        using Conf = Config<parts::ElectroEngine, parts::AutomaticTransmission<5>>;
+        using Restr = CarRestrictions<Conf>;
+        using Gen = Generator<Conf, Restr, parts::ElectroEngine, parts::AutomaticTransmission<5>>;
+        Gen car;
+        return true;
+    });
+//*/
+/*
+    //has to fail at compile time (uneven ger number for electro engine
+    LTest::addTest("CarGeneratorTest fail", [](){
+        CarGenerator<parts::Body, parts::ElectroEngine, parts::AutomaticTransmission<5>> gen;
+        return true;
+    });
+*/
     LTest::run();
     return 0;
 }
