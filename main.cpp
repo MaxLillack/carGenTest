@@ -40,8 +40,8 @@ int main()
     //containsDerivedPart Tests
     LTest::addTest("containsDerivedPart() 1", [](){
         using Gen = Generator<parts::AutomaticTransmission>;
-        LTAssert::False(Gen::containsDerivedPart<parts::Engine>());
-        LTAssert::True(Gen::containsDerivedPart<parts::Transmission>());
+        LTAssert::False(Gen::containsPart<parts::Engine>());
+        LTAssert::True(Gen::containsPart<parts::Transmission>());
         return true;
     });
 
