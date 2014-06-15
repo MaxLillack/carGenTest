@@ -2,8 +2,12 @@
 #include "LTestAssert.h"
 #include "parts.h"
 #include "generator.h"
+#include "dsl.h"
 
 using namespace std;
+
+
+class DEADDSL{};
 
 int main()
 {
@@ -45,7 +49,28 @@ int main()
         return true;
     });
 
+    LTest::addTest("DSL1", [](){
+        using Gen = DSL<EcoLine>;
+        Gen test;
+        return true;
+    });
 
+
+    LTest::addTest("DSL2", [](){
+        using Gen= typename DSL<EcoLine>::Gen<>;
+        LTAssert::True(Gen::containsPart<parts::Engine>());
+        LTAssert::True(Gen::containsPart<parts::ElectroEngine>());
+        LTAssert::False(Gen::containsPart<parts::GasEngine>());
+        return true;
+    });
+
+/*
+    //must not compile
+    LTest::addTest("DSL3", [](){
+        using Gen= typename DSL<DEADDSL>::Gen<>;
+        return true;
+    });
+//*/
     LTest::run();
     return 0;
 }
