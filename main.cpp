@@ -64,13 +64,38 @@ int main()
         return true;
     });
 
-/*
-    //must not compile
     LTest::addTest("DSL3", [](){
+        using Gen= typename DSL<EcoLine>::Gen<parts::GasEngine>;
+        LTAssert::True(Gen::containsPart<parts::Engine>());
+        LTAssert::True(Gen::containsPart<parts::ElectroEngine>());
+        LTAssert::True(Gen::containsPart<parts::GasEngine>());
+        return true;
+    });
+
+/*
+    //must not compile: "Unknown DSLClass handling. The is no DSL specialization for given class"
+    LTest::addTest("DSL4", [](){
         using Gen= typename DSL<DEADDSL>::Gen<>;
         return true;
     });
 //*/
+
+/*
+    //must not compile: "Gas is not Eco"
+    LTest::addTest("DSL5", [](){
+        using Gen= typename DSL<StrictEcoLine>::Gen<parts::GasEngine>;
+        return true;
+    });
+//*/
+
+    LTest::addTest("DSL6", [](){
+        using Gen= typename DSL<StrictEcoLine>::Gen<>;
+        LTAssert::True(Gen::containsPart<parts::Engine>());
+        LTAssert::True(Gen::containsPart<parts::ElectroEngine>());
+        LTAssert::False(Gen::containsPart<parts::GasEngine>());
+        return true;
+    });
+
     LTest::run();
     return 0;
 }
