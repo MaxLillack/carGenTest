@@ -96,6 +96,14 @@ int main()
         return true;
     });
 
+    LTest::addTest("DSL Part Reduce", [](){
+        using Gen= typename DSL<StrictEcoLine, EcoLine>::Gen<>;
+        LTAssert::True(Gen::containsPart<parts::Engine>());
+        LTAssert::True(Gen::containsPart<parts::ElectroEngine>());
+        LTAssert::False(Gen::containsPart<parts::GasEngine>());
+        return true;
+    });
+
     LTest::run();
     return 0;
 }
